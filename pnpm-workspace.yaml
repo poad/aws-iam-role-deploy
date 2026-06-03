@@ -1,0 +1,18 @@
+packages:
+  - .
+
+allowBuilds:
+  esbuild: false
+  unrs-resolver: false
+
+minimumReleaseAge: 10080 # 7 days in minutes
+minimumReleaseAgeExclude:
+  - ast-v8-to-istanbul@1.0.3
+  - tinyexec@1.2.3
+  - pnpm@11.5.1
+
+overrides:
+  eslint-import-resolver-typescript: '>=4'
+  semver: '>=7'
+
+trustPolicy: no-downgrade
