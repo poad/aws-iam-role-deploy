@@ -7,6 +7,7 @@ on:
         description: 'Name of repository (with owner)'
         required: true
         type: string
+        default: poad/
       path:
         description: 'Path of IAM Role AWS CDK in repository'
         required: true
@@ -45,7 +46,7 @@ jobs:
         repository: ${{ inputs.repository }}
 
     - name: Install pnpm
-      uses: pnpm/setup@v1
+      uses: pnpm/setup@5d160c5bc68a09337ad0d5654e237e03253b5879 # v1.0.0
 
     - name: Configure AWS Credentials
       uses: aws-actions/configure-aws-credentials@254c19bd240aabef8777f48595e9d2d7b972184b # v6.2.1
