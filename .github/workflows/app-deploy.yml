@@ -12,7 +12,7 @@ on:
         description: 'Path of IAM Role AWS CDK in repository'
         required: true
         type: string
-        default: cdk
+        default: deploy-role
 
 env:
   OIDC_IAM_ROLE_ARN: ${{ secrets.OIDC_IAM_ROLE_ARN }}
@@ -38,7 +38,22 @@ jobs:
         client-id: ${{ vars.APP_CLIENT_ID }}
         private-key: ${{ secrets.APP_PRIVATE_KEY }}
         owner: ${{ github.repository_owner }}
-      
+
+    - name: Get repository info
+      id: repo_info
+      env:
+        GH_TOKEN: ${{ steps.generate_token.outputs.token }}
+      run: |
+        REPO_JSON=$(gh api "repos/${{ inputs.repository }}" --jq '{id: .id, owner_id: .owner.id}')
+        REPO_ID=$(echo "$REPO_JSON" | jq -r '.id')
+        OWNER_ID=$(echo "$REPO_JSON" | jq -r '.owner_id')
+
+        echo "::add-mask::$REPO_ID"
+        echo "::add-mask::$OWNER_ID"
+
+        echo "repository_id=$REPO_ID" >> "$GITHUB_OUTPUT"
+        echo "owner_id=$OWNER_ID" >> "$GITHUB_OUTPUT"
+
     - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       with:
         persist-credentials: false
@@ -57,4 +72,11 @@ jobs:
 
     - name: deploy
       working-directory: ${{ inputs.path }}
-      run: pnpm dlx aws-cdk@latest deploy --require-approval=never
+      env:
+        REPOSITORY_ID: ${{ steps.repo_info.outputs.repository_id }}
+        REPOSITORY_OWNER_ID: ${{ steps.repo_info.outputs.owner_id }}
+      run: |
+        pnpm dlx aws-cdk@latest deploy \
+          -c "repository-id=$REPOSITORY_ID" \
+          -c "repository-owner-id=$REPOSITORY_OWNER_ID" \
+          --require-approval=never
