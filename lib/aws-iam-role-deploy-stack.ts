@@ -1,6 +1,6 @@
+import * as iam from 'aws-cdk-lib/aws-iam';
 import * as cdk from 'aws-cdk-lib/core';
 import { Construct } from 'constructs';
-import * as iam from 'aws-cdk-lib/aws-iam';
 
 export class AwsIamRoleDeployStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
@@ -19,9 +19,7 @@ export class AwsIamRoleDeployStack extends cdk.Stack {
           sid: 'AssumeBootstrapRoles',
           effect: iam.Effect.ALLOW,
           actions: ['sts:AssumeRole'],
-          resources: [
-            `arn:aws:iam::${account}:role/cdk-*`,
-          ],
+          resources: [`arn:aws:iam::${account}:role/cdk-*`],
         }),
 
         // 2. CloudFormation スタックの読み取り（差分確認・状態確認）
@@ -60,16 +58,15 @@ export class AwsIamRoleDeployStack extends cdk.Stack {
     new iam.Role(this, 'Role', {
       roleName: 'iam-role-deploy-role',
       assumedBy: new iam.FederatedPrincipal(
-        `arn:aws:iam::${this.account}:oidc-provider/token.actions.githubusercontent.com`, {
+        `arn:aws:iam::${this.account}:oidc-provider/token.actions.githubusercontent.com`,
+        {
           StringLike: {
             'token.actions.githubusercontent.com:sub': 'repo:poad/*:*',
           },
         },
         'sts:AssumeRoleWithWebIdentity',
       ).withSessionTags(),
-      managedPolicies: [
-        cdkDeployPolicy,
-      ],
+      managedPolicies: [cdkDeployPolicy],
       inlinePolicies: {
         'iam-policy': new iam.PolicyDocument({
           statements: [
@@ -112,7 +109,6 @@ export class AwsIamRoleDeployStack extends cdk.Stack {
           ],
         }),
       },
-
     });
   }
 }

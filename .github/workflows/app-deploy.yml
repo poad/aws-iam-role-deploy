@@ -24,59 +24,59 @@ permissions:
 
 # 同時実行すると CREATE_IN_PROGRESS や UPDATE_IN_PROGRESS 状態で cdk deploy を行う可能性があるため抑止する
 concurrency:
-  group: "cloudformation"
+  group: 'cloudformation'
   cancel-in-progress: false
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-    - name: Generate GitHub App Token
-      id: generate_token
-      uses: actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510 # v3.3.0
-      with:
-        client-id: ${{ vars.APP_CLIENT_ID }}
-        private-key: ${{ secrets.APP_PRIVATE_KEY }}
-        owner: ${{ github.repository_owner }}
+      - name: Generate GitHub App Token
+        id: generate_token
+        uses: actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510 # v3.3.0
+        with:
+          client-id: ${{ vars.APP_CLIENT_ID }}
+          private-key: ${{ secrets.APP_PRIVATE_KEY }}
+          owner: ${{ github.repository_owner }}
 
-    - name: Get repository info
-      id: repo_info
-      env:
-        GH_TOKEN: ${{ steps.generate_token.outputs.token }}
-      run: |
-        REPO_JSON=$(gh api "repos/${{ inputs.repository }}" --jq '{id: .id, owner_id: .owner.id}')
-        REPO_ID=$(echo "$REPO_JSON" | jq -r '.id')
-        OWNER_ID=$(echo "$REPO_JSON" | jq -r '.owner_id')
+      - name: Get repository info
+        id: repo_info
+        env:
+          GH_TOKEN: ${{ steps.generate_token.outputs.token }}
+        run: |
+          REPO_JSON=$(gh api "repos/${{ inputs.repository }}" --jq '{id: .id, owner_id: .owner.id}')
+          REPO_ID=$(echo "$REPO_JSON" | jq -r '.id')
+          OWNER_ID=$(echo "$REPO_JSON" | jq -r '.owner_id')
 
-        echo "::add-mask::$REPO_ID"
-        echo "::add-mask::$OWNER_ID"
+          echo "::add-mask::$REPO_ID"
+          echo "::add-mask::$OWNER_ID"
 
-        echo "repository_id=$REPO_ID" >> "$GITHUB_OUTPUT"
-        echo "owner_id=$OWNER_ID" >> "$GITHUB_OUTPUT"
+          echo "repository_id=$REPO_ID" >> "$GITHUB_OUTPUT"
+          echo "owner_id=$OWNER_ID" >> "$GITHUB_OUTPUT"
 
-    - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-      with:
-        persist-credentials: false
-        token: ${{ steps.generate_token.outputs.token }}
-        repository: ${{ inputs.repository }}
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          token: ${{ steps.generate_token.outputs.token }}
+          repository: ${{ inputs.repository }}
 
-    - name: Install pnpm
-      uses: pnpm/setup@a0881977cd8ea73b1ed212236c99ca10dcc80cf4 # v3.1.1
+      - name: Install pnpm
+        uses: pnpm/setup@a0881977cd8ea73b1ed212236c99ca10dcc80cf4 # v3.1.1
 
-    - name: Configure AWS Credentials
-      uses: aws-actions/configure-aws-credentials@e1253824e5c10ff9df46874f81ed3ec929e19cfd # v6.3.0
-      with:
-        role-to-assume: ${{ env.OIDC_IAM_ROLE_ARN }}
-        role-session-name: GitHubActions
-        aws-region: ${{ env.AWS_REGION }}
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@e1253824e5c10ff9df46874f81ed3ec929e19cfd # v6.3.0
+        with:
+          role-to-assume: ${{ env.OIDC_IAM_ROLE_ARN }}
+          role-session-name: GitHubActions
+          aws-region: ${{ env.AWS_REGION }}
 
-    - name: deploy
-      working-directory: ${{ inputs.path }}
-      env:
-        REPOSITORY_ID: ${{ steps.repo_info.outputs.repository_id }}
-        REPOSITORY_OWNER_ID: ${{ steps.repo_info.outputs.owner_id }}
-      run: |
-        pnpm dlx aws-cdk@latest deploy \
-          -c "repository-id=$REPOSITORY_ID" \
-          -c "repository-owner-id=$REPOSITORY_OWNER_ID" \
-          --require-approval=never
+      - name: deploy
+        working-directory: ${{ inputs.path }}
+        env:
+          REPOSITORY_ID: ${{ steps.repo_info.outputs.repository_id }}
+          REPOSITORY_OWNER_ID: ${{ steps.repo_info.outputs.owner_id }}
+        run: |
+          pnpm dlx aws-cdk@latest deploy \
+            -c "repository-id=$REPOSITORY_ID" \
+            -c "repository-owner-id=$REPOSITORY_OWNER_ID" \
+            --require-approval=never
