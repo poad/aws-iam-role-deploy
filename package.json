@@ -13,10 +13,10 @@
   "devDependencies": {
     "@eslint/js": "^10.0.1",
     "@stylistic/eslint-plugin": "^5.10.0",
-    "@types/node": "^24.19.1",
-    "@vitest/coverage-v8": "^4.1.11",
+    "@types/node": "^24.19.2",
+    "@vitest/coverage-v8": "^5.0.4",
     "@vitest/eslint-plugin": "^1.6.27",
-    "aws-cdk": "^2.1144.0",
+    "aws-cdk": "^2.1145.0",
     "eslint": "^10.12.0",
     "eslint-import-resolver-typescript": "^4.4.5",
     "eslint-plugin-awscdk": "^4.4.3",
@@ -25,25 +25,25 @@
     "jiti": "^2.7.0",
     "tsx": "^4.23.15",
     "typescript": "^6.0.3",
-    "typescript-eslint": "^8.71.1",
-    "vite": "^8.3.3",
-    "vitest": "^4.1.11"
+    "typescript-eslint": "^8.71.2",
+    "vite": "^8.3.4",
+    "vitest": "^5.0.4"
   },
   "dependencies": {
-    "aws-cdk-lib": "^2.272.0",
+    "aws-cdk-lib": "^2.273.0",
     "constructs": "^10.8.1"
   },
   "devEngines": {
     "packageManager": {
       "name": "pnpm",
-      "version": "12.13.0",
+      "version": "12.14.0",
       "onFail": "download"
     }
   },
   "engines": {
     "runtime": {
       "name": "node",
-      "version": "^24.22.0",
+      "version": "^24.22.1",
       "onFail": "download"
     }
   }
