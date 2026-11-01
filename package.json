@@ -13,32 +13,32 @@
     "format:check": "oxfmt --check"
   },
   "dependencies": {
-    "aws-cdk-lib": "^2.273.0",
+    "aws-cdk-lib": "^2.274.0",
     "constructs": "^10.8.1"
   },
   "devDependencies": {
-    "@types/node": "^24.19.2",
-    "@vitest/coverage-v8": "^5.0.4",
-    "aws-cdk": "^2.1145.0",
+    "@types/node": "^26.6.5",
+    "@vitest/coverage-v8": "^5.0.5",
+    "aws-cdk": "^2.1146.1",
     "jiti": "^2.7.0",
-    "oxfmt": "^0.73.0",
-    "oxlint": "^1.88.0",
+    "oxfmt": "^0.74.0",
+    "oxlint": "^1.89.0",
     "tsx": "^4.23.15",
-    "typescript": "^6.0.3",
-    "vite": "^8.3.4",
-    "vitest": "^5.0.4"
+    "typescript": "^7.0.2",
+    "vite": "^8.3.5",
+    "vitest": "^5.0.5"
   },
   "devEngines": {
     "packageManager": {
       "name": "pnpm",
-      "version": "12.15.0",
+      "version": "12.17.0",
       "onFail": "download"
     }
   },
   "engines": {
     "runtime": {
       "name": "node",
-      "version": "^24.22.1",
+      "version": "^26.13.0",
       "onFail": "download"
     }
   }
