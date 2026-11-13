@@ -19,10 +19,10 @@
   "devDependencies": {
     "@types/node": "^26.6.6",
     "@vitest/coverage-v8": "^5.1.0",
-    "aws-cdk": "^2.1147.0",
+    "aws-cdk": "^2.1148.0",
     "jiti": "^2.7.0",
-    "oxfmt": "^0.74.0",
-    "oxlint": "^1.91.0",
+    "oxfmt": "^0.77.0",
+    "oxlint": "^1.92.0",
     "tsx": "^4.23.15",
     "typescript": "^7.0.2",
     "vite": "^8.3.6",
